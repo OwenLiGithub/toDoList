@@ -1,15 +1,15 @@
 <template>
   <li>
-      <input type="checkbox" ><span>{{content}}</span>
+      <Checkbox v-model="licontent.isChecked">
+    </Checkbox><span>{{licontent.msg}}</span>
   </li>
 </template>
 
 <script>
 export default {
-  props:['content','index'],
+  props:['licontent','index'],
   data () {
     return {
-      msg: ''
     }
   }
 }

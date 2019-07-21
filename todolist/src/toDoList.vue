@@ -12,22 +12,21 @@
     </div>
    <br>
       <ol>
-        <todo-item v-for="(item,index) of list" :key="index"
-        :content="item" :indexItem="index"
-        @delete="handledelete"
-        @checked="handledchecked"
-        ></todo-item>
+        <li v-for="(item,index) of showList" :key="index">
+            <input type="checkbox" v-bind:checked="item.isChecked">
+            <span>{{item.content}}</span>
+        </li>
       </ol>
     <div>
       <ul id="filters">
                 <li>
-                    <a href="#" >ALL</a>
+                    <a @click="all" >ALL</a>
                 </li>
                 <li>
-                    <a href="#" >Active</a>
+                    <a @click="active" >Active</a>
                 </li>
                 <li>
-                    <a href="#">Complete</a>
+                    <a @click="complete">Complete</a>
                 </li>
             </ul>
     </div>
@@ -35,29 +34,38 @@
 </template>
 
 <script >
-import todoitem from './components/todoitem'
 export default {
- components:{
-   'todo-item':todoitem
- },
  data(){
    return{
      msg:'',
      list:[],
-     checkedList:[]
+     showList:[]
    }
  },
  methods:{
    handleclick(){
-     this.list.push(this.msg),
+     let attribute = {
+        content: this.msg,
+        isChecked: false,
+        isEdit: false
+     }
+     this.list.push(attribute)
+     this.showList.push(attribute)
      this.msg = ''
    },
-   handledelete(index){
-     this.list.splice(index-1,1)
-   },
-    handledchecked(index){
-     this.checkedList.push(this.list[index])
-   }
+    complete(){
+      this.showItems=this.list.filter((item)=>{
+        return item.isChecked;
+      })
+    },
+    active(){
+      this.showItems=this.list.filter((item)=>{
+        return !item.isChecked;
+      })
+    },
+    all(){
+      this.showItems=this.list
+    }
  }
 }
 </script>
