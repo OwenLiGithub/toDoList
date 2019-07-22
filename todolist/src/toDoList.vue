@@ -13,8 +13,12 @@
    <br>
       <ol>
         <li v-for="(item,index) of showList" :key="index">
-            <input type="checkbox" v-bind:checked="item.isChecked">
-            <span>{{item.content}}</span>
+            <input type="checkbox" v-model="item.isChecked">
+            <input type="text" v-if="item.isEdit" v-model="item.content" @keyup.enter="onSubmit(index)">
+              <span v-else @dblclick="onDblclick(index)">
+                  <del v-if="item.isChecked">{{item.content}}</del>
+                  <span v-else>{{item.content}}</span>
+              </span>
         </li>
       </ol>
     <div>
@@ -54,17 +58,23 @@ export default {
      this.msg = ''
    },
     complete(){
-      this.showItems=this.list.filter((item)=>{
+      this.showList = this.list.filter((item)=>{
         return item.isChecked;
       })
     },
     active(){
-      this.showItems=this.list.filter((item)=>{
+      this.showList=this.list.filter((item)=>{
         return !item.isChecked;
       })
     },
     all(){
-      this.showItems=this.list
+      this.showList = this.list
+    },
+    onDblclick(index){
+      this.showList[index].isEdit = true
+    },
+    onSubmit(index){
+        this.showList[index].isEdit=false
     }
  }
 }
